@@ -4,12 +4,12 @@ resource "aws_ecs_task_definition" "task" {
     {
       name      = "${var.projectName}"
       essential = true,
-      image     = "${aws_ecr_repository.repository.repository_url}:latest",
+      image     = "${aws_ecr_repository.repository.repository_url}:v1.1.0",
       command   = ["-Dsonar.search.javaAdditionalOpts=-Dnode.store.allow_mmap=false"]
       environment = [
         {
           name  = "SONAR_JDBC_URL"
-          value = "jdbc:postgresql://${aws_db_instance.rds.identifier}/${aws_db_instance.rds.db_name}"
+          value = "jdbc:postgresql://rds-${var.projectName}/lanchonete"
         },
         {
           name  = "SONAR_JDBC_USERNAME"
@@ -46,5 +46,5 @@ resource "aws_ecs_task_definition" "task" {
   memory = "4096"
   cpu    = "2048"
 
-  depends_on = [aws_db_instance.rds]
+  # depends_on = [aws_db_instance.rds]
 }
